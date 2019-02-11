@@ -3,9 +3,12 @@ package com.saba.cursomc.domain;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido {
 	
+	@JsonIgnore
 	@EmbeddedId
 	ItemPedidoPK id = new ItemPedidoPK();
 	
@@ -26,10 +29,12 @@ public class ItemPedido {
 		this.preco = preco;
 	}
 	
+	@JsonIgnore
 	public Pedido getPedido() {
 		return this.id.getPedido();
 	}
 	
+	@JsonIgnore
 	public Produto getProduto() {
 		return this.id.getProduto();
 	}
