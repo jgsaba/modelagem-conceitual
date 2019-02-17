@@ -1,5 +1,6 @@
 package com.saba.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.saba.cursomc.services.exception.DataIntegrityException;
@@ -16,6 +17,11 @@ public class CategoriaService {
 	
 	@Autowired
 	private CategoriaRepository repo;
+
+	public List<Categoria> findAll(){
+		return repo.findAll();
+	}
+
 	
 	public Categoria find(Integer id) {
 		

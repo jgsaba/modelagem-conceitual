@@ -1,8 +1,10 @@
 package com.saba.cursomc.resources;
 
 import java.net.URI;
-import java.util.concurrent.CancellationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import com.saba.cursomc.dto.CategoriaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,14 @@ public class CategoriaResource {
 	
 	@Autowired
 	private CategoriaService service;
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll(){
+
+	    List<Categoria> categorias = service.findAll();
+	    List<CategoriaDTO> categoriaDTOS = categorias.stream().map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
+	    return ResponseEntity.ok().body(categoriaDTOS);
+    }
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
