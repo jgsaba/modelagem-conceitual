@@ -6,6 +6,9 @@ import java.util.Optional;
 import com.saba.cursomc.services.exception.DataIntegrityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.saba.cursomc.domain.Categoria;
@@ -30,6 +33,11 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + " Tipo: " + Categoria.class.getName()));
 	}
+
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+        PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return repo.findAll(pageRequest);
+    }
 	
 	public Categoria insert(Categoria novaCategoria) {
 		novaCategoria.setId(null);
