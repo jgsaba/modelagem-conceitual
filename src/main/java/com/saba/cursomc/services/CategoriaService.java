@@ -3,6 +3,7 @@ package com.saba.cursomc.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.saba.cursomc.dto.CategoriaDTO;
 import com.saba.cursomc.services.exception.DataIntegrityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,5 +57,10 @@ public class CategoriaService {
 		}catch (DataIntegrityViolationException e){
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possua produtos");
 		}
+	}
+
+	public Categoria fromDto(CategoriaDTO categoriaDTO){
+
+		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 	}
 }

@@ -14,6 +14,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.saba.cursomc.domain.Categoria;
 import com.saba.cursomc.services.CategoriaService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value="/categorias")
 public class CategoriaResource {
@@ -37,7 +39,8 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria novaCategoria){
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO novaCategoriaDTO){
+	    Categoria novaCategoria = service.fromDto(novaCategoriaDTO);
 		novaCategoria = service.insert(novaCategoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(novaCategoria.getId()).toUri();
@@ -46,7 +49,9 @@ public class CategoriaResource {
 	}
 
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody Categoria categoria){
+	public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody CategoriaDTO categoriaDTO){
+
+		Categoria categoria = new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 		categoria.setId(id);
 		service.update(categoria);
 
