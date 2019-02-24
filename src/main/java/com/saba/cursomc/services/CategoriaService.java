@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.saba.cursomc.domain.Categoria;
 import com.saba.cursomc.repository.CategoriaRepository;
 import com.saba.cursomc.services.exception.ObjectNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class CategoriaService {
