@@ -4,7 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.saba.cursomc.domain.Categoria;
+import com.saba.cursomc.domain.Cidade;
+import com.saba.cursomc.domain.Endereco;
+import com.saba.cursomc.domain.enums.TipoCliente;
 import com.saba.cursomc.dto.ClienteDTO;
+import com.saba.cursomc.dto.ClienteNewDTO;
+import com.saba.cursomc.repository.CidadeRepository;
+import com.saba.cursomc.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +26,12 @@ public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository repo;
+
+	@Autowired
+	private CidadeRepository cidadeRepo;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public Cliente find(Integer id) {
 		
@@ -36,7 +48,9 @@ public class ClienteService {
 
 	public Cliente insert(Cliente cliente){
 		cliente.setId(null);
-		return repo.save(cliente);
+        repo.save(cliente);
+		enderecoRepository.saveAll(cliente.getEnderecos());
+		return cliente;
 	}
 
 	public Cliente update(ClienteDTO clienteDTO){
@@ -55,6 +69,27 @@ public class ClienteService {
 
 		repo.deleteById(id);
 	}
+
+	public Cliente fromDto(ClienteNewDTO clienteNewDTO){
+	    Cliente cliente = new Cliente(null, clienteNewDTO.getNome(), clienteNewDTO.getEmail(),
+                clienteNewDTO.getCpfOuCnpj(), TipoCliente.toEnum(clienteNewDTO.getTipo()));
+
+	    Cidade cidade = cidadeRepo.getOne(clienteNewDTO.getCidadeId());
+
+        Endereco endereco = new Endereco(null, clienteNewDTO.getLogradouro(), clienteNewDTO.getNumero(),
+                clienteNewDTO.getComplemento(), clienteNewDTO.getBairro(), clienteNewDTO.getCep(), cliente, cidade);
+
+        cliente.getEnderecos().add(endereco);
+        cliente.getTelefones().add(clienteNewDTO.getTelefone1());
+
+        if(clienteNewDTO.getTelefone2() != null)
+            cliente.getTelefones().add(clienteNewDTO.getTelefone2());
+
+        if(clienteNewDTO.getTelefone3() != null)
+            cliente.getTelefones().add(clienteNewDTO.getTelefone3());
+
+        return cliente;
+    }
 
 	public Cliente fromDto(ClienteDTO clienteDTO){
 
