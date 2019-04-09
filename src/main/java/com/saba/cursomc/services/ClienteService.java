@@ -42,7 +42,7 @@ public class ClienteService {
 	}
 
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
-		PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
 
