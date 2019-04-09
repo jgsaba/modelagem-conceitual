@@ -12,6 +12,7 @@ import com.saba.cursomc.dto.ClienteNewDTO;
 import com.saba.cursomc.repository.CidadeRepository;
 import com.saba.cursomc.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -67,7 +68,11 @@ public class ClienteService {
 
 	public void delete(Integer id){
 
-		repo.deleteById(id);
+		try {
+			repo.deleteById(id);
+		}catch (DataIntegrityViolationException e){
+			throw new DataIntegrityViolationException("Não é possível excluir porque há pedidos relacionadas");
+		}
 	}
 
 	public Cliente fromDto(ClienteNewDTO clienteNewDTO){
